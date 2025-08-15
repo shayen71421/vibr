@@ -1,103 +1,60 @@
-import Image from "next/image";
+import Image from 'next/image';
+import Link from 'next/link';
+import { FaUsers, FaHeart, FaGraduationCap } from 'react-icons/fa';
 
-export default function Home() {
+const codeBgSVG = (
+  <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 1 }}>
+    <defs>
+      <linearGradient id="gradCode" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stopColor="#0ff" />
+        <stop offset="100%" stopColor="#ff66cc" />
+      </linearGradient>
+    </defs>
+    {/* Example code lines */}
+    <text x="10" y="60" fill="url(#gradCode)" fontSize="32" fontFamily="monospace" opacity="0.22">
+      {'{ user: "VibeMatch", mood: "coded" }'}
+    </text>
+    <text x="140" y="200" fill="#00ffff" fontSize="22" fontFamily="monospace" opacity="0.12">
+      {'function findConnection(user) {'}
+    </text>
+    <text x="200" y="240" fill="#ff66cc" fontSize="18" fontFamily="monospace" opacity="0.10">
+      {'return interests.filter(...);'}
+    </text>
+    <text x="280" y="400" fill="#22c55e" fontSize="14" fontFamily="monospace" opacity="0.20">
+      {'// College vibes loading...'}
+    </text>
+    {/* Add more text/code as desired */}
+  </svg>
+);
+
+const LandingPage: React.FC = () => {
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+    <div className="flex min-h-screen flex-col items-center justify-center p-24 relative overflow-hidden">
+      {/* Coded background overlays */}
+      <div className="absolute inset-0 bg-gradient-to-br from-black via-slate-900 to-gray-950 opacity-95"></div>
+      <div className="absolute inset-0">
+        {codeBgSVG}
+      </div>
+      <div className="absolute inset-0 z-0 bg-gradient-to-t from-transparent via-[#1f2937]/30 to-transparent pointer-events-none"></div>
+      {/* Foreground content */}
+      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex text-center">
+        <h1 className="text-4xl font-bold drop-shadow-[0_0_8px_#00ffff] drop-shadow-[0_0_16px_#00ffff] drop-shadow-[0_0_24px_#00ffff]" style={{ color: '#00ffff' }}>
+          Welcome to Vibe Match
+        </h1>
+      </div>
+      <p className="text-xl mt-4 drop-shadow-[0_0_8px_#ff66cc] drop-shadow-[0_0_16px_#ff66cc]" style={{ color: '#ff66cc' }}>
+        Find your perfect college connection based on shared interests and personality!
+      </p>
+      <Link href="/signin" className="mt-8 text-lg transition-all duration-300 ease-in-out hover:text-cyan-300 hover:drop-shadow-[0_0_8px_#00ffff] hover:drop-shadow-[0_0_16px_#00ffff] hover:drop-shadow-[0_0_24px_#00ffff]" style={{ color: '#00ffff', textDecoration: 'underline' }}>
+        Sign In
+      </Link>
+      {/* Iconography */}
+      <div className="absolute bottom-8 left-8 flex space-x-4 z-20">
+        <FaUsers className="text-blue-500 text-3xl drop-shadow-[0_0_8px_#3b82f6] drop-shadow-[0_0_16px_#3b82f6] hover:animate-pulse" />
+        <FaHeart className="text-purple-500 text-3xl drop-shadow-[0_0_8px_#a855f7] drop-shadow-[0_0_16px_#a855f7] hover:animate-pulse" />
+        <FaGraduationCap className="text-green-500 text-3xl drop-shadow-[0_0_8px_#22c55e] drop-shadow-[0_0_16px_#22c55e] hover:animate-pulse" />
+      </div>
     </div>
   );
-}
+};
+export default LandingPage;

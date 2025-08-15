@@ -1,26 +1,52 @@
-@import "tailwindcss";
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+/* Global body style inspired by the reference image */
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: #000000;
+  color: #ffffff;
+  font-family: 'Arial', 'Orbitron', 'Russo One', sans-serif;
+  min-height: 100vh;
+  letter-spacing: 0.03em;
+  overflow-x: hidden;
+}
+
+/* Optional: custom scrollbar to blend with black background */
+::-webkit-scrollbar {
+  width: 8px;
+  background: #111926;
+}
+::-webkit-scrollbar-thumb {
+  background: #23272e;
+  border-radius: 8px;
+}
+
+/* Star/shine deco for background (use with pseudo-elements or as needed) */
+.star {
+  width: 44px;
+  height: 44px;
+  background: transparent;
+  border-radius: 50%;
+  box-shadow: 0 0 25px 2px #fff, 0 0 60px 15px #8fd5ff44;
+}
+
+/* Decorative, softly blurred neon dot */
+.neon-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ba68ff, #4ecbff, #fa65bb, #ffed4e);
+  box-shadow: 0 0 20px 8px #ba68ff88, 0 0 60px 20px #4ecbff55;
+  opacity: 0.7;
+}
+
+/* Optional: animated glowing lines or circles (for stars, rings, etc) */
+.glow-animate {
+  animation: glow 2.2s infinite alternate;
+}
+
+@keyframes glow {
+  from { filter: brightness(1.1) blur(0.5px); }
+  to   { filter: brightness(2.5) blur(2.5px); }
 }
