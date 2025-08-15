@@ -1,75 +1,98 @@
 "use client";
 
-import React, { useState } from 'react';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { useRouter } from 'next/navigation';
-import { auth } from '../firebase'; // Import auth from the new firebase.ts file
-import { auth } from '../../utils/firebase'; // Corrected import path
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import { auth, db } from "../../utils/firebase"; // Ensure these are imported from your firebase.ts file
+import { signInWithPopup, GoogleAuthProvider, UserCredential } from "firebase/auth";
+import { doc, getDoc, setDoc } from "firebase/firestore";
+import { FaUsers, FaHeart, FaGraduationCap, FaGoogle } from "react-icons/fa";
+
+const codeBgSVG = (
+  <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 1 }}>
+    <defs>
+      <linearGradient id="gradCode" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stopColor="#0ff" />
+        <stop offset="100%" stopColor="#ff66cc" />
+      </linearGradient>
+    </defs>
+    <text x="10" y="60" fill="url(#gradCode)" fontSize="32" fontFamily="monospace" opacity="0.22">
+      {'{ user: "VibeMatch", mood: "coded" }'}
+    </text>
+    <text x="140" y="200" fill="#00ffff" fontSize="22" fontFamily="monospace" opacity="0.12">
+      {'function findConnection(user) {'}
+    </text>
+    <text x="200" y="240" fill="#ff66cc" fontSize="18" fontFamily="monospace" opacity="0.10">
+      {'return interests.filter(...);'}
+    </text>
+    <text x="280" y="400" fill="#22c55e" fontSize="14" fontFamily="monospace" opacity="0.20">
+      {"// College vibes loading..."}
+    </text>
+  </svg>
+);
 
 const SignInPage: React.FC = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
-  const handleSignIn = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError(null); // Clear previous errors
-
+  const handleGoogleSignIn = async () => {
     try {
-      await signInWithEmailAndPassword(auth, email, password);
-      // Redirect to a protected page after successful sign-in
-      router.push('/'); // Redirect to the home page
+      const provider = new GoogleAuthProvider();
+      provider.setCustomParameters({ hd: "sahrdaya.ac.in" });
+
+      const result: UserCredential = await signInWithPopup(auth, provider);
+      const user = result.user;
+
+      // Firestore user doc reference
+      const userDocRef = doc(db, "users", user.uid);
+      const userDoc = await getDoc(userDocRef);
+
+      if (!userDoc.exists()) {
+        // User does not exist, add them to Firestore then redirect to questionnaire
+        await setDoc(userDocRef, {
+          uid: user.uid,
+          name: user.displayName,
+          email: user.email,
+          photoURL: user.photoURL,
+        });
+        router.push("/questionnaire");
+      } else {
+        // User exists, redirect to home page
+        router.push("/");
+      }
     } catch (error: any) {
       setError(error.message);
+      console.error("Error during Google Sign-In:", error);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white p-8 rounded shadow-md w-full max-w-sm">
-        <h1 className="text-2xl font-bold mb-6 text-center">Sign In</h1>
-        <form onSubmit={handleSignIn}>
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
-              Email
-            </label>
-            <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="email"
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
-          <div className="mb-6">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
-              Password
-            </label>
-            <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-              id="password"
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
-          {error && (
-            <p className="text-red-500 text-xs italic mb-4">{error}</p>
-          )}
-          <div className="flex items-center justify-between">
-            <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-              type="submit"
-            >
-              Sign In
-            </button>
-          </div>
-        </form>
+    <div className="flex min-h-screen flex-col items-center justify-center p-24 relative overflow-hidden">
+      {/* Coded background overlays */}
+      <div className="absolute inset-0 bg-gradient-to-br from-black via-slate-900 to-gray-950 opacity-95"></div>
+      <div className="absolute inset-0">{codeBgSVG}</div>
+      <div className="absolute inset-0 z-0 bg-gradient-to-t from-transparent via-[#1f2937]/30 to-transparent pointer-events-none"></div>
+
+      <div className="z-10 max-w-md w-full space-y-8 text-center">
+        <h1
+          className="text-4xl font-bold drop-shadow-[0_0_8px_#00ffff] drop-shadow-[0_0_16px_#00ffff] drop-shadow-[0_0_24px_#00ffff]"
+          style={{ color: "#00ffff" }}
+        >
+          Sign in to Vibe Match
+        </h1>
+        {error && (
+          <p className="text-red-500 text-xs italic mb-4">{error}</p>
+        )}
+        <div className="flex items-center justify-center">
+          <button
+            className="px-8 py-4 rounded-full text-xl font-bold text-black transition-all duration-300 ease-in-out hover:scale-105 drop-shadow-[0_0_8px_#00ffff] hover:drop-shadow-[0_0_16px_#00ffff]"
+            style={{ backgroundColor: "#00ffff" }}
+            onClick={handleGoogleSignIn}
+          >
+            <span className="inline-flex items-center gap-2">
+              <FaGoogle /> Sign in with Google
+            </span>
+          </button>
+        </div>
       </div>
     </div>
   );

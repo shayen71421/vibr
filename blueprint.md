@@ -7,7 +7,17 @@ This blueprint outlines the structure and core logic of the Vibe Match applicati
 ### Project Structure
 Vibe Match is a college social matching application utilizing Firebase Firestore. The core functionality revolves around matching students based on compatibility scores derived from their profile answers. To ensure fast lookups, compatibility scores are pre-calculated and stored in a dedicated `matchFinal` collection.
 
+## User Interface (UI) Consistency
+
+The application will maintain a consistent visual theme across key pages, specifically the home page and the sign-in page. This includes using a dark background, neon-like colors for text and interactive elements, glow effects, and a consistent typography and layout. The background elements and iconography present on the home page will also be added to the sign-in page to reinforce this visual consistency.
 ## Firestore Collections
+
+## Authentication
+The application will use Google authentication exclusively, integrated with Firebase Authentication. User sign-in will be restricted to email addresses within the `sahrdaya.ac.in` domain. Email and password login will be disabled.
+
+Upon successful Google sign-in, the application will check the `users` collection in Firestore to see if a document with the user's email already exists. If the user is new (email not found), a new document will be added to the `users` collection with their UID, name, email, and photoURL. New users will then be redirected to the `/questionnaire` page to complete their profile, while existing users will be redirected to the home page (`/`).
+
+
 
 ### Collection: `users`
 
